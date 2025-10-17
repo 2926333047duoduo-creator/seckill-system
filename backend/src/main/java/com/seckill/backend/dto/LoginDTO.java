@@ -6,4 +6,5 @@ import lombok.Data;
 public class LoginDTO {
     private String account;
     private String password;
+    private String role;
 }

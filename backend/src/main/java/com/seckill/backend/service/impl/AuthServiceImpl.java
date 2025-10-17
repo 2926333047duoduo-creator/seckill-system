@@ -2,8 +2,8 @@ package com.seckill.backend.service.impl;
 
 import com.seckill.backend.common.MessageConstants;
 import com.seckill.backend.common.Result;
-import com.seckill.backend.dto.RegisterDTO;
 import com.seckill.backend.dto.LoginDTO;
+import com.seckill.backend.dto.RegisterDTO;
 import com.seckill.backend.entity.User;
 import com.seckill.backend.mapper.UserMapper;
 import com.seckill.backend.service.AuthService;
@@ -30,7 +30,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtUtils jwtUtils;
 
-    // 注册逻辑
+    /**
+     * 用户注册（默认角色：CLIENT）
+     */
     @Override
     public Result<String> register(RegisterDTO request) {
         User existing = userMapper.findByAccount(request.getAccount());
@@ -44,12 +46,15 @@ public class AuthServiceImpl implements AuthService {
         user.setAccount(request.getAccount());
         user.setUsername(request.getUsername());
         user.setPassword(encryptedPwd);
+        user.setRole("CLIENT");
 
         userMapper.insert(user);
         return Result.ok(MessageConstants.REGISTER_SUCCESS);
     }
 
-    // 登录逻辑
+    /**
+     * 登录（支持多角色）
+     */
     @Override
     public Result<String> login(LoginDTO request) {
         User user = userMapper.findByAccount(request.getAccount());
@@ -57,17 +62,16 @@ public class AuthServiceImpl implements AuthService {
             return Result.fail(MessageConstants.LOGIN_FAILED);
         }
 
-        // 验证密码
+
         boolean matches = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!matches) {
             return Result.fail(MessageConstants.LOGIN_FAILED);
         }
 
-        // 生成JWT令牌
-        String token = jwtUtils.createToken(user.getAccount());
 
-        // 保存到Redis（半小时过期）
-        String redisKey = "login:token:" + user.getAccount();
+        String token = jwtUtils.createToken(user.getAccount(), user.getRole());
+
+        String redisKey = "login:token:" + user.getRole().toLowerCase() + ":" + user.getAccount();
         redisTemplate.opsForValue().set(redisKey, token, 30, TimeUnit.MINUTES);
 
         return Result.ok(token);

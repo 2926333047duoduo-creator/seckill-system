@@ -10,10 +10,13 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface UserMapper {
 
+    // 根据账号查询用户
     @Select("SELECT * FROM user WHERE account = #{account}")
     User findByAccount(@Param("account") String account);
 
-    @Insert("INSERT INTO user(account, username, password) VALUES(#{account}, #{username}, #{password})")
+    // 插入用户（包含 role）
+    @Insert("INSERT INTO user(account, username, password, role) " +
+            "VALUES(#{account}, #{username}, #{password}, #{role})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(User user);
 }

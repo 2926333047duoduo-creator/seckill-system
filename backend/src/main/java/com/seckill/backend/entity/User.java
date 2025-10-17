@@ -10,4 +10,5 @@ public class User {
     private String username;   // 用户昵称
     private String password;   // 加密密码
     private LocalDateTime createTime;
+    private String role;
 }
