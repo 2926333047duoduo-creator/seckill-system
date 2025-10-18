@@ -1,5 +1,6 @@
 package com.seckill.backend.config;
 
+import com.seckill.backend.entity.User;
 import com.seckill.backend.utils.JwtUtils;
 import com.seckill.backend.context.UserContext;
 import com.seckill.backend.common.MessageConstants;
@@ -42,24 +43,26 @@ public class AuthInterceptor implements HandlerInterceptor {
         String token = authHeader.substring(7);
         String account;
         String role;
+        String id;
 
         try {
             account = jwtUtils.getAccount(token);
             role = jwtUtils.getRole(token);
+            id = jwtUtils.getUserId(token);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, MessageConstants.INVALID_TOKEN);
             return false;
         }
 
         // 校验 Redis 登录状态（根据角色区分）
-        String redisKey = "login:token:" + role.toLowerCase() + ":" + account;
+        String redisKey = "login:token:" + role.toLowerCase() + ":" + id;
         String cachedToken = redisTemplate.opsForValue().get(redisKey);
         if (cachedToken == null || !cachedToken.equals(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, MessageConstants.TOKEN_EXPIRED);
             return false;
         }
 
-        // 3️⃣ 基于角色的接口访问控制
+        //  基于角色的接口访问控制
         String uri = request.getRequestURI();
 
         // CLIENT 端只能访问 /api/client/**
@@ -74,7 +77,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // 4️⃣ 滑动窗口限流（1 秒内最多 10 次）
+        //  滑动窗口限流（1 秒内最多 10 次）
         String limitKey = "limit:zset:" + role.toLowerCase() + ":" + account;
         long now = System.currentTimeMillis();
 
@@ -92,12 +95,13 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // 5️⃣ 刷新 Redis 登录过期时间（30 分钟滑动）
+        // 刷新 Redis 登录过期时间（30 分钟滑动）
         redisTemplate.expire(redisKey, 30, TimeUnit.MINUTES);
 
-        // 6️⃣ 保存用户信息到 ThreadLocal
+        // 保存用户信息到 ThreadLocal
         UserContext.setAccount(account);
         UserContext.setRole(role);
+        UserContext.setUserId(id);
         return true;
     }
 
