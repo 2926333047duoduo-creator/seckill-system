@@ -61,10 +61,10 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // 刷新 Redis 登录过期时间（30 分钟）
+
         redisTemplate.expire(redisKey, 30, TimeUnit.MINUTES);
 
-        // 保存上下文
+
         UserContext.setAccount(account);
         UserContext.setRole(role);
         UserContext.setUserId(id);

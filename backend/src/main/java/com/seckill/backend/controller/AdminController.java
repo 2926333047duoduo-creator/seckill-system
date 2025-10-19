@@ -6,9 +6,9 @@ import com.seckill.backend.dto.VoucherDTO;
 import com.seckill.backend.entity.Voucher;
 import com.seckill.backend.mapper.VoucherMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -24,17 +24,17 @@ public class AdminController {
     private StringRedisTemplate stringRedisTemplate;
 
     /**
-     * 创建新的优惠券
+     * Create a new voucher
      */
     @PostMapping("/add")
     public Result<String> addVoucher(@RequestBody VoucherDTO dto) {
         try {
-            // 1. 校验开始时间
-            if (dto.getStartTime() == null || dto.getStartTime().isBefore(LocalDateTime.now())) {
-                return Result.fail("开始时间不能早于当前时间");
-            }
+            // 1. Validate start time
+//            if (dto.getStartTime() == null || dto.getStartTime().isBefore(LocalDateTime.now())) {
+//                return Result.fail("Start time cannot be earlier than the current time");
+//            }
 
-            // 2. 构建实体对象
+            // 2. Build entity object
             Voucher voucher = new Voucher();
             String uuid = UUID.randomUUID().toString();
             voucher.setId(uuid);
@@ -45,10 +45,10 @@ public class AdminController {
             voucher.setStartTime(dto.getStartTime());
             voucher.setCreateTime(LocalDateTime.now());
 
-            // 3. 插入数据库
+            // 3. Insert into database
             voucherMapper.insert(voucher);
 
-            // 4. 初始化 Redis 秒杀库存 key
+            // 4. Initialize Redis key for seckill stock
             String stockKey = "seckill:stock:" + uuid;
             stringRedisTemplate.opsForValue().set(stockKey, String.valueOf(dto.getStock()));
 
@@ -60,7 +60,7 @@ public class AdminController {
     }
 
     /**
-     * 更新优惠券信息（仅限开始前）
+     * Update voucher information (only allowed before start time)
      */
     @PostMapping("/update")
     public Result<String> updateVoucher(@RequestBody VoucherDTO dto) {
@@ -74,13 +74,13 @@ public class AdminController {
         }
 
         try {
-            // 更新数据库
+            // Update database record
             existing.setName(dto.getName());
             existing.setStartTime(dto.getStartTime());
             existing.setStock(dto.getStock());
             voucherMapper.update(existing);
 
-            // 同步更新 Redis 库存
+            // Sync Redis stock
             String stockKey = "seckill:stock:" + dto.getId();
             stringRedisTemplate.opsForValue().set(stockKey, String.valueOf(dto.getStock()));
 
@@ -92,7 +92,7 @@ public class AdminController {
     }
 
     /**
-     * 删除优惠券（仅限开始前）
+     * Delete a voucher (only allowed before start time)
      */
     @DeleteMapping("/delete/{id}")
     public Result<String> deleteVoucher(@PathVariable String id) {
@@ -106,10 +106,10 @@ public class AdminController {
         }
 
         try {
-            // 删除数据库记录
+            // Delete database record
             voucherMapper.delete(id);
 
-            // 删除 Redis 中对应的库存和订单记录
+            // Remove corresponding Redis keys (stock and order)
             String stockKey = "seckill:stock:" + id;
             String orderKey = "seckill:order:" + id;
             stringRedisTemplate.delete(Arrays.asList(stockKey, orderKey));
@@ -122,7 +122,7 @@ public class AdminController {
     }
 
     /**
-     * 查询所有优惠券
+     * Retrieve all vouchers
      */
     @GetMapping("/list")
     public Result<List<Voucher>> listVouchers() {

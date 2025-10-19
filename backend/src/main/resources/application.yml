@@ -8,7 +8,7 @@ spring:
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
-    redis:  # ✅ 不要用 spring.data.redis
+    redis:
       host: 127.0.0.1
       port: 6379
       password:

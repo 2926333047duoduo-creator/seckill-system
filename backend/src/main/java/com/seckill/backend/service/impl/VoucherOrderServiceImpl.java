@@ -1,5 +1,6 @@
 package com.seckill.backend.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seckill.backend.common.MessageConstants;
 import com.seckill.backend.common.Result;
 import com.seckill.backend.context.UserContext;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -34,8 +36,10 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
     private StringRedisTemplate stringRedisTemplate;
     @Resource
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    // Lua 脚本（库存扣减 + 一人一单判断）
+    // Lua script (atomic stock deduction + one-order-per-user validation)
     private static final DefaultRedisScript<Long> SECKILL_SCRIPT;
 
     static {
@@ -45,13 +49,13 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
     }
 
     /**
-     * 秒杀入口（Redis + Lua 原子校验 + MQ 异步下单）
+     * Seckill entry (Redis + Lua atomic validation + MQ async order creation)
      */
     @Override
     public Result seckillVoucher(String voucherId) {
         String userId = UserContext.getUserId();
         long orderId = snowflakeIdWorker.nextId();
-        // 1. 执行 Lua 脚本校验库存和重复下单
+        // 1. Execute Lua script to validate stock and prevent duplicate orders
         Long result = stringRedisTemplate.execute(
                 SECKILL_SCRIPT,
                 Collections.emptyList(),
@@ -62,31 +66,31 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
         if (r == 1 || r == 3) return Result.fail(MessageConstants.OUT_OF_STOCK);
         if (r == 2) return Result.fail(MessageConstants.DUPLICATE_ORDER);
 
-        // 2. 构建订单对象
+        // 2. Build order object
         VoucherOrder order = new VoucherOrder();
         order.setId(orderId);
         order.setUserId(userId);
         order.setVoucherId(voucherId);
         order.setOrderTime(LocalDateTime.now());
 
-        // 3. 异步发送 MQ 消息
+        // 3. Asynchronously send MQ message
         try {
             rocketMQTemplate.asyncSend(
                     "order_topic",
-                    MessageBuilder.withPayload(order).build(),
+                    MessageBuilder.withPayload(objectMapper.writeValueAsString(order)).build(),
                     new SendCallback() {
                         @Override
                         public void onSuccess(SendResult sendResult) {
-                            log.info("异步下单消息发送成功：{}", sendResult);
+                            log.info("Async order message sent successfully: {}", sendResult);
                         }
 
                         @Override
                         public void onException(Throwable e) {
-                            log.error("异步下单消息发送失败：{}", e.getMessage(), e);
+                            log.error("Async order message failed to send: {}", e.getMessage(), e);
                         }
                     });
         } catch (Exception e) {
-            log.error("发送 RocketMQ 消息异常", e);
+            log.error("Exception occurred while sending RocketMQ message", e);
             return Result.fail(MessageConstants.SERVER_ERROR);
         }
 
@@ -94,7 +98,7 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
     }
 
     /**
-     * 真正创建订单（由 MQ 消费者调用）
+     * Create actual order (called by MQ consumer)
      */
     @Override
     @Transactional
@@ -102,25 +106,25 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
         String userId = voucherOrder.getUserId();
         String voucherId = voucherOrder.getVoucherId();
 
-        // 1. 幂等校验：是否已下过单
+        // 1. Idempotency check: has the user already placed an order?
         int count = voucherOrderMapper.countByUserAndVoucher(userId, voucherId);
         if (count > 0) {
-            log.warn("用户 {} 已抢购过优惠券 {}，拒绝重复下单", userId, voucherId);
+            log.warn("User {} has already purchased voucher {}, rejecting duplicate order", userId, voucherId);
             return;
         }
 
-        // 2. 扣减库存（乐观锁）
+        // 2. Deduct stock (optimistic lock)
         int stockResult = voucherOrderMapper.decrementStock(voucherId);
         if (stockResult == 0) {
-            log.warn("用户 {} 抢购优惠券 {} 失败：库存不足", userId, voucherId);
+            log.warn("User {} failed to purchase voucher {}: insufficient stock", userId, voucherId);
             return;
         }
 
         int insertResult = voucherOrderMapper.insertOrder(voucherOrder);
         if (insertResult == 1) {
-            log.info("用户 {} 成功创建订单 {}", userId, voucherOrder.getId());
+            log.info("User {} successfully created order {}", userId, voucherOrder.getId());
         } else {
-            log.error("用户 {} 创建订单失败：数据库插入失败", userId);
+            log.error("User {} failed to create order: database insert failed", userId);
         }
     }
 }

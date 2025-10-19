@@ -14,11 +14,11 @@ public class JwtUtils {
      */
     public String createToken(String account, String role, String userId) {
         return Jwts.builder()
-                .setSubject(account)                        // "sub" = account
-                .claim("role", role)                        // 自定义字段 role
-                .claim("userId", userId)                    // 自定义字段 userId（UUID 字符串）
-                .setIssuedAt(new Date())                    // 签发时间
-                .signWith(SignatureAlgorithm.HS256, SECRET) // 签名算法
+                .setSubject(account)
+                .claim("role", role)
+                .claim("userId", userId)
+                .setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
     }
 
