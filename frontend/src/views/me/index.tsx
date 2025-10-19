@@ -66,6 +66,7 @@ const Me: React.FC = () => {
   return (
     <div className={styles["me-page"]}>
       {contextHolder}
+      <div className={styles["me-bg-image"]}></div>
       <Modal
         title="Log out"
         closable={false}

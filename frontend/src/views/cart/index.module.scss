@@ -1,0 +1,19 @@
+.cart-page {
+  position: relative;
+  .cart-empty {
+    position: absolute;
+    top: 30vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    text-align: center;
+    font-size: 6vw;
+    .cart-empty-image {
+      width: 30vw;
+      height: 30vw;
+      margin: 0 auto 4vh;
+      background: url("../../assets/cart/empty-cart.png") no-repeat;
+      background-size: 30vw 30vw;
+    }
+  }
+}
