@@ -90,7 +90,7 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
             return Result.fail(MessageConstants.SERVER_ERROR);
         }
 
-        return Result.ok(result);
+        return Result.ok(voucherId);
     }
 
     /**
