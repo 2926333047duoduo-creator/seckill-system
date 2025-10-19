@@ -90,7 +90,7 @@ const Login: React.FC = () => {
           <input
             className={styles["login-input"]}
             placeholder="Please enter your username"
-            defaultValue={username}
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
         ) : (
@@ -99,7 +99,7 @@ const Login: React.FC = () => {
             <span style={{ marginLeft: "4vw" }}>
               <Segmented<string>
                 options={["admin", "client"]}
-                defaultValue={role.toLowerCase()}
+                value={role.toLowerCase()}
                 onChange={(value) => {
                   setRole(value.toUpperCase() as "ADMIN" | "CLIENT");
                 }}
@@ -110,31 +110,35 @@ const Login: React.FC = () => {
         <input
           className={styles["login-input"]}
           placeholder="Please enter your account"
-          defaultValue={account}
+          value={account}
           onChange={(e) => setAccount(e.target.value)}
         />
         <input
           className={styles["login-input"]}
           placeholder="Please enter your password"
-          defaultValue={password}
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       <div className={styles["login-container"]}>
-        <Checkbox
-          onChange={onChange}
-          checked={agreement_checked}
-          style={{ marginLeft: "6.5vw" }}
-        />
-        <span style={{ marginLeft: "2vw", fontSize: "4vw" }}>
-          I accept{" "}
-          <span
-            style={{ color: "#1890ff" }}
-            onClick={() => messageApi.info("It doesn't seem to be working")}
-          >
-            the user agreements
-          </span>
-        </span>
+        {pageType === "login" ? (
+          <div>
+            <Checkbox
+              onChange={onChange}
+              checked={agreement_checked}
+              style={{ marginLeft: "6.5vw" }}
+            />
+            <span style={{ marginLeft: "2vw", fontSize: "4vw" }}>
+              I accept{" "}
+              <span
+                style={{ color: "#1890ff" }}
+                onClick={() => messageApi.info("It doesn't seem to be working")}
+              >
+                the user agreements
+              </span>
+            </span>
+          </div>
+        ) : null}
         <div
           className={styles["login-btn"]}
           onClick={() =>
