@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Import(RocketMQAutoConfiguration.class)
 public class BackendApplication {
     public static void main(String[] args) {
+
         SpringApplication.run(BackendApplication.class, args);
     }
     @Bean

@@ -10,11 +10,16 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private AuthInterceptor authInterceptor;
-
+    @Autowired
+    private RateLimitInterceptor rateLimitInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/auth/login", "/auth/register"); // 登录注册放行
+                .excludePathPatterns("/auth/login", "/auth/register")
+                .order(0);
+        registry.addInterceptor(rateLimitInterceptor)
+                .addPathPatterns("/client/seckill/**")
+                .order(1);
     }
 }
