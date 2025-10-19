@@ -51,16 +51,15 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
     public Result seckillVoucher(String voucherId) {
         String userId = UserContext.getUserId();
         long orderId = snowflakeIdWorker.nextId();
-
         // 1. 执行 Lua 脚本校验库存和重复下单
         Long result = stringRedisTemplate.execute(
                 SECKILL_SCRIPT,
-                Collections.singletonList(voucherId),
-                userId, String.valueOf(orderId)
+                Collections.emptyList(),
+                voucherId, userId, String.valueOf(orderId)
         );
 
         int r = result != null ? result.intValue() : -1;
-        if (r == 1) return Result.fail(MessageConstants.OUT_OF_STOCK);
+        if (r == 1 || r == 3) return Result.fail(MessageConstants.OUT_OF_STOCK);
         if (r == 2) return Result.fail(MessageConstants.DUPLICATE_ORDER);
 
         // 2. 构建订单对象
@@ -69,7 +68,6 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
         order.setUserId(userId);
         order.setVoucherId(voucherId);
         order.setOrderTime(LocalDateTime.now());
-
 
         // 3. 异步发送 MQ 消息
         try {
@@ -92,7 +90,7 @@ public class VoucherOrderServiceImpl implements IVoucherOrderService {
             return Result.fail(MessageConstants.SERVER_ERROR);
         }
 
-        return Result.ok(orderId);
+        return Result.ok(result);
     }
 
     /**
