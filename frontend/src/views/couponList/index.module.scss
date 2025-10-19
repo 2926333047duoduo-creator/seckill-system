@@ -1,0 +1,345 @@
+$page-bg: #f9fafb;
+$main-color: #ffb74d;
+$text-dark: #333;
+$text-gray: #666;
+
+.page {
+  min-height: 100vh;
+  background-color: $page-bg;
+}
+
+.container {
+  max-width: 92vw;
+  margin: 0 auto;
+  padding-top: 2vh;
+}
+
+/* Header */
+.header {
+  background: #fff;
+  border-radius: 2vw;
+  padding: 3vh 3vw;
+  margin-bottom: 3vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0.8vh 1.2vh rgba(0, 0, 0, 0.05);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+}
+
+.headerIcon {
+  width: 8vw;
+  height: 8vw;
+  background: rgba($main-color, 0.15);
+  border-radius: 1.5vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  color: $main-color;
+  width: 4vw;
+  height: 4vw;
+}
+
+.title {
+  font-size: 4.5vw;
+  font-weight: 700;
+  color: $text-dark;
+}
+
+.subtitle {
+  font-size: 3vw;
+  color: $text-gray;
+}
+
+.addButton {
+  background: $main-color;
+  color: #fff;
+  padding: 2vh 4vw;
+  border: none;
+  border-radius: 2vw;
+  font-size: 3.5vw;
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+
+.addIcon {
+  width: 3.5vw;
+  height: 3.5vw;
+}
+
+/* Cards */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3vh;
+}
+
+.card {
+  background: white;
+  border-radius: 2vw;
+  overflow: hidden;
+  box-shadow: 0 0.8vh 1.2vh rgba(0, 0, 0, 0.05);
+}
+
+.cardHeader {
+  background: linear-gradient(to right, $main-color, #f6c643);
+  color: #fff;
+  padding: 3vh 3vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardTitle {
+  font-size: 4vw;
+  font-weight: 700;
+  margin-bottom: 1vw;
+}
+
+.status {
+  padding: 1vw 2vw;
+  border-radius: 5vw;
+  font-size: 2.8vw;
+  font-weight: 500;
+
+  &.active {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  &.inactive {
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.discountBox {
+  text-align: right;
+}
+
+.discount {
+  font-size: 6vw;
+  font-weight: 700;
+}
+
+.condition {
+  font-size: 3vw;
+  opacity: 0.85;
+}
+
+/* Body */
+.cardBody {
+  padding: 3vh 3vw;
+}
+
+.usage {
+  margin-bottom: 3vh;
+}
+
+.usageTop {
+  display: flex;
+  justify-content: space-between;
+  font-size: 3vw;
+  color: $text-gray;
+  margin-bottom: 1vh;
+}
+
+.usageBar {
+  width: 100%;
+  height: 1vh;
+  background: #eee;
+  border-radius: 5vw;
+  overflow: hidden;
+}
+
+.usageProgress {
+  height: 100%;
+  background: $main-color;
+  border-radius: 5vw;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+  color: $text-gray;
+  font-size: 3vw;
+  margin-bottom: 3vh;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3vw;
+  background: #f9f9f9;
+  border-radius: 2vw;
+  padding: 3vw;
+  margin-bottom: 2vh;
+}
+
+.infoLabel {
+  font-size: 2.8vw;
+  color: #888;
+}
+
+.infoValue {
+  font-size: 3.2vw;
+  font-weight: 600;
+  color: $text-dark;
+}
+
+.actions {
+  display: flex;
+  gap: 2vw;
+  padding-top: 2vh;
+  border-top: 1px solid #eee;
+}
+
+.editBtn,
+.deleteBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2vw;
+  padding: 1.5vh 0;
+  border-radius: 1.5vw;
+  font-size: 3vw;
+  border: none;
+}
+
+.editBtn {
+  background: #f9f9f9;
+  color: $text-dark;
+}
+
+.deleteBtn {
+  background: rgba(255, 0, 0, 0.05);
+  color: #e53935;
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  background: white;
+  border-radius: 2vw;
+  padding: 10vh 4vw;
+  box-shadow: 0 0.8vh 1.2vh rgba(0, 0, 0, 0.05);
+
+  h3 {
+    font-size: 4vw;
+    font-weight: 600;
+    margin-bottom: 2vh;
+  }
+
+  p {
+    font-size: 3vw;
+    color: $text-gray;
+  }
+}
+
+.emptyIcon {
+  width: 16vw;
+  height: 16vw;
+  background: #f2f2f2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2vh;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 2vw;
+  padding: 3vh 4vw;
+  text-align: center;
+  width: 80vw;
+}
+
+.modalIcon {
+  width: 10vw;
+  height: 10vw;
+  background: rgba(255, 0, 0, 0.1);
+  border-radius: 50%;
+  margin: 0 auto 2vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalTrash {
+  color: #e53935;
+  width: 5vw;
+  height: 5vw;
+}
+
+.modalButtons {
+  display: flex;
+  gap: 3vw;
+  margin-top: 3vh;
+}
+
+.cancelBtn,
+.confirmBtn {
+  flex: 1;
+  padding: 2vh 0;
+  border-radius: 2vw;
+  font-size: 3.5vw;
+  border: none;
+}
+
+.cancelBtn {
+  background: #eee;
+  color: $text-dark;
+}
+
+.confirmBtn {
+  background: #e53935;
+  color: #fff;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+
+  input {
+    width: 75vw;
+    padding: 2vh 3vw;
+    border: 1px solid #ddd;
+    border-radius: 3vw;
+    font-size: 4vw;
+  }
+}
+
+.datetimeRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 2vw;
+
+  input {
+    flex: 1;
+    padding: 2vh 2vw;
+    border: 1px solid #ddd;
+    border-radius: 2vw;
+    font-size: 3.5vw;
+  }
+}

@@ -53,12 +53,12 @@ const Layout: React.FC = () => {
         >
           <div
             className={`${styles["footer-navigator-me"]} ${
-              currentPath === "/me" ? styles["active-me"] : ""
+              currentPath.startsWith("/me/") ? styles["active-me"] : ""
             }`}
           ></div>
           <div
             className={`${styles["footer-navigator-text"]} ${
-              currentPath === "/me" ? styles["active-text"] : ""
+              currentPath.startsWith("/me/") ? styles["active-text"] : ""
             }`}
           >
             Me

@@ -1,0 +1,39 @@
+.me-page {
+  position: relative;
+  .me-bg-image {
+    position: absolute;
+    top: -2vh;
+    right: 2vw;
+    width: 30vw;
+    height: 30vw;
+    background: url("../../assets/me/noodles.png") no-repeat;
+    background-size: 30vw 30vw;
+  }
+  .me-title {
+    margin: 8vh 0 0 5vw;
+    font-size: 8vw;
+    font-weight: 700;
+    .username {
+      display: inline-block;
+      max-width: 60vw;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      vertical-align: bottom;
+    }
+  }
+  .func-list {
+    margin-top: 6vh;
+    .func-item {
+      display: flex;
+      justify-content: space-between;
+      height: 5vh;
+      padding: 2vh 8vw 0;
+      font-size: 4.5vw;
+      border-bottom: 1px solid #e0e0e0;
+      &:active {
+        background-color: #f2f2f2;
+      }
+    }
+  }
+}
