@@ -1,5 +1,6 @@
+import { CloseOutlined } from "@ant-design/icons";
 import type { CheckboxChangeEvent } from "antd";
-import { Checkbox, message } from "antd";
+import { Checkbox, message, Segmented } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
@@ -10,6 +11,8 @@ const Login: React.FC = () => {
 
   const [pageType, setPageType] = React.useState<"login" | "register">("login");
   const [username, setUsername] = React.useState("");
+  const [role, setRole] = React.useState<"ADMIN" | "CLIENT">("CLIENT");
+  const [account, setAccount] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [agreement_checked, setAgreement_checked] = React.useState(false);
 
@@ -23,20 +26,44 @@ const Login: React.FC = () => {
       messageApi.warning("Please accept the user agreements first");
       return;
     }
-    console.log("Logging in with", { username, password });
+    console.log("Logging in with", { username, role, account, password });
     navigate("/shop");
   };
 
   return (
     <div className={styles["login-page"]}>
       {contextHolder}
+      <div className={styles["login-header"]} onClick={() => navigate(-1)}>
+        <CloseOutlined />
+      </div>
       <div className={styles["welcome"]}>Welcome to seckill</div>
       <div className={styles["input-container"]}>
+        {pageType === "register" ? (
+          <input
+            className={styles["login-input"]}
+            placeholder="Please enter your username"
+            defaultValue={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        ) : (
+          <div className={styles["login-role"]}>
+            <span>Select Your Role</span>
+            <span style={{ marginLeft: "4vw" }}>
+              <Segmented<string>
+                options={["admin", "client"]}
+                defaultValue={role.toLowerCase()}
+                onChange={(value) => {
+                  setRole(value.toUpperCase() as "ADMIN" | "CLIENT");
+                }}
+              />
+            </span>
+          </div>
+        )}
         <input
           className={styles["login-input"]}
-          placeholder="Please enter your username"
-          defaultValue={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Please enter your account"
+          defaultValue={account}
+          onChange={(e) => setAccount(e.target.value)}
         />
         <input
           className={styles["login-input"]}
@@ -55,7 +82,7 @@ const Login: React.FC = () => {
           I accept{" "}
           <span
             style={{ color: "#1890ff" }}
-            onClick={() => messageApi.info("Sorry, not available yet")}
+            onClick={() => messageApi.info("It doesn't seem to be working")}
           >
             the user agreements
           </span>
@@ -87,15 +114,15 @@ const Login: React.FC = () => {
       <div className={styles["login-footer"]}>
         <div
           className={styles["login-facebook"]}
-          onClick={() => messageApi.info("Sorry, not available yet")}
+          onClick={() => messageApi.info("It doesn't seem to be working")}
         ></div>
         <div
           className={styles["login-google"]}
-          onClick={() => messageApi.info("Sorry, not available yet")}
+          onClick={() => messageApi.info("It doesn't seem to be working")}
         ></div>
         <div
           className={styles["login-tiktok"]}
-          onClick={() => messageApi.info("Sorry, not available yet")}
+          onClick={() => messageApi.info("It doesn't seem to be working")}
         ></div>
       </div>
     </div>
