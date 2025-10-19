@@ -15,8 +15,7 @@ public interface UserMapper {
     User findByAccount(@Param("account") String account);
 
     // 插入用户（包含 role）
-    @Insert("INSERT INTO user(account, username, password, role) " +
-            "VALUES(#{account}, #{username}, #{password}, #{role})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("INSERT INTO user(id, account, username, password, role) " +
+            "VALUES(#{id}, #{account}, #{username}, #{password}, #{role})")
     int insert(User user);
 }

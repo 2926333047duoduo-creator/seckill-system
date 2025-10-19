@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -43,13 +44,15 @@ public class AuthServiceImpl implements AuthService {
         String encryptedPwd = passwordEncoder.encode(request.getPassword());
 
         User user = new User();
+        String uuid = UUID.randomUUID().toString(); // 生成 UUID
+        user.setId(uuid);
         user.setAccount(request.getAccount());
         user.setUsername(request.getUsername());
         user.setPassword(encryptedPwd);
         user.setRole("CLIENT");
 
         userMapper.insert(user);
-        return Result.ok(MessageConstants.REGISTER_SUCCESS);
+        return Result.ok(uuid);
     }
 
     /**
@@ -61,17 +64,18 @@ public class AuthServiceImpl implements AuthService {
         if (user == null) {
             return Result.fail(MessageConstants.LOGIN_FAILED);
         }
-
-
+        if (!user.getRole().equals(request.getRole())){
+            return Result.fail(MessageConstants.ROLE_NOT_MATCH);
+        }
         boolean matches = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!matches) {
             return Result.fail(MessageConstants.LOGIN_FAILED);
         }
 
 
-        String token = jwtUtils.createToken(user.getAccount(), user.getRole());
+        String token = jwtUtils.createToken(user.getAccount(), user.getRole(),user.getId());
 
-        String redisKey = "login:token:" + user.getRole().toLowerCase() + ":" + user.getAccount();
+        String redisKey = "login:token:" + user.getRole().toLowerCase() + ":" + user.getId();
         redisTemplate.opsForValue().set(redisKey, token, 30, TimeUnit.MINUTES);
 
         return Result.ok(token);
