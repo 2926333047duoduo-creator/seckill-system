@@ -25,14 +25,28 @@ const Me: React.FC = () => {
 
   // read role from Cookie
   const role = Cookies.get("role"); // "ADMIN" or "USER"
+  const username = Cookies.get("username");
+  const token = Cookies.get("token");
+  const isLogin = Boolean(username && token);
 
-  // if not "ADMIN", remove "Set Voucher"
-  const funcLists =
-    role === "ADMIN"
-      ? allFuncLists
-      : allFuncLists.filter((item) => item !== "Set Voucher");
+  const funcLists = (() => {
+    let funcLists = [...allFuncLists];
+    if (role !== "ADMIN") {
+      // if not "ADMIN", remove "Set Voucher"
+      funcLists = funcLists.filter((item) => item !== "Set Voucher");
+    }
+    if (!isLogin) {
+      // if not login, remove "Log out"
+      funcLists = funcLists.filter((item) => item !== "Log out");
+    }
+    return funcLists;
+  })();
 
   const handleOk = () => {
+    Cookies.remove("token", { path: "/" });
+    Cookies.remove("role", { path: "/" });
+    Cookies.remove("username", { path: "/" });
+    Cookies.remove("account", { path: "/" });
     setIsModalOpen(false);
     navigate("/login");
   };
@@ -66,7 +80,29 @@ const Me: React.FC = () => {
         <p>Are you sure you want to log out? </p>
       </Modal>
       <div className={styles["me-title"]}>
-        Welcome, <div>username</div>
+        {isLogin ? (
+          <div>
+            Welcome,
+            <br />
+            <div className={styles["username"]}>{username}</div>
+          </div>
+        ) : (
+          <div>
+            Guest
+            <br />
+            Please{" "}
+            <span
+              style={{
+                color: "#1890ff",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </span>
+          </div>
+        )}
       </div>
       <div className={styles["func-list"]}>
         {funcLists.map((item) => (

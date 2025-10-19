@@ -38,11 +38,11 @@ const Login: React.FC = () => {
       password,
     });
     if (res.code === 200) {
-      const token = res.data;
-      // set Cookies
+      const { token, userName } = res.data;
+      setUsername(userName);
       Cookies.set("token", token, { expires: 7, path: "/" });
       Cookies.set("role", role, { expires: 7, path: "/" });
-      Cookies.set("username", username, { expires: 7, path: "/" });
+      Cookies.set("username", userName, { expires: 7, path: "/" });
       Cookies.set("account", account, { expires: 7, path: "/" });
       messageApi.success("Login successfully");
       navigate("/shop");
