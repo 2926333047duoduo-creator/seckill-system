@@ -1,0 +1,316 @@
+.page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+/* header */
+.header {
+  background: linear-gradient(to right, #fb923c, #ef4444);
+  color: white;
+  padding: 4vh 4vw 4vh;
+}
+
+.headerInner {
+  width: 88vw;
+  margin: 0 auto;
+}
+
+.locationBox {
+  margin-bottom: 3vh;
+
+  h1 {
+    font-size: 4.5vw;
+    font-weight: 700;
+  }
+}
+
+.locationRow {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+  font-size: 3vw;
+  opacity: 0.9;
+}
+
+.mapIcon {
+  width: 3.5vw;
+  height: 3.5vw;
+}
+
+.searchBox {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 4vw;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  width: 4vw;
+  height: 4vw;
+}
+
+.searchInput {
+  width: 74vw;
+  padding: 2.5vh 4vw 2.5vh 10vw;
+  border-radius: 10vw;
+  border: none;
+  outline: none;
+  font-size: 3.8vw;
+  box-shadow: 0 0.8vh 1.2vh rgba(0, 0, 0, 0.1);
+}
+
+/* Section */
+.section {
+  background: white;
+  width: 95vw;
+  border-radius: 4vw;
+  padding: 4vw;
+  width: 88vw;
+  margin: 2vh auto 2vh;
+  box-shadow: 0 0.8vh 1vh rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3vh;
+}
+
+.titleLeft {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+
+  h2 {
+    font-size: 4vw;
+    font-weight: 700;
+  }
+}
+
+.titleIcon {
+  width: 4vw;
+  height: 4vw;
+  color: #f97316;
+}
+
+.moreButton {
+  color: #f97316;
+  font-size: 3.5vw;
+  background: none;
+  border: none;
+}
+
+/* Coupons */
+.couponGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2vw;
+}
+
+.couponCard {
+  border-radius: 3vw;
+  padding: 4vw;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f87171, #f59e0b);
+
+  &.red {
+    background: linear-gradient(135deg, #f87171, #f59e0b);
+  }
+
+  &.purple {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+  }
+
+  &.blue {
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  }
+}
+
+.discount {
+  font-size: 5vw;
+  font-weight: 700;
+}
+
+.condition {
+  font-size: 3vw;
+  opacity: 0.85;
+  margin-bottom: 2vw;
+}
+
+.claimButton {
+  background: white;
+  color: #374151;
+  border: none;
+  padding: 1vw 3vw;
+  border-radius: 6vw;
+  font-size: 3vw;
+}
+
+.circle {
+  position: absolute;
+  right: -3vw;
+  bottom: -3vw;
+  width: 12vw;
+  height: 12vw;
+  background: white;
+  opacity: 0.1;
+  border-radius: 50%;
+}
+
+/* Categories */
+.sectionHeader {
+  font-size: 4vw;
+  font-weight: 700;
+  margin-bottom: 3vh;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3vw;
+}
+
+.categoryButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5vw;
+  padding: 2vw;
+  border-radius: 3vw;
+
+  span {
+    font-size: 3.2vw;
+    color: #4b5563;
+    font-weight: 500;
+  }
+}
+
+.iconBox {
+  width: 14vw;
+  height: 14vw;
+  border-radius: 3vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.orange {
+    background: #ffedd5;
+    color: #fb923c;
+  }
+
+  &.amber {
+    background: #fef3c7;
+    color: #f59e0b;
+  }
+
+  &.red {
+    background: #fee2e2;
+    color: #ef4444;
+  }
+
+  &.pink {
+    background: #fce7f3;
+    color: #ec4899;
+  }
+}
+
+/* Restaurants */
+.restaurantGrid {
+  display: grid;
+  gap: 3vw;
+}
+
+.restaurantCard {
+  background: white;
+  border-radius: 3vw;
+  overflow: hidden;
+  box-shadow: 0 0.6vh 1vh rgba(0, 0, 0, 0.05);
+  transition: 0.2s;
+}
+
+.imageBox {
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 30vh;
+    object-fit: cover;
+  }
+}
+
+.discountBadge {
+  position: absolute;
+  top: 2vw;
+  right: 2vw;
+  background: #ef4444;
+  color: white;
+  padding: 0.8vw 3vw;
+  border-radius: 6vw;
+  font-size: 3vw;
+}
+
+.restaurantInfo {
+  padding: 3vw;
+
+  h3 {
+    font-size: 3.8vw;
+    font-weight: 700;
+    margin-bottom: 2vw;
+  }
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+  font-size: 3.2vw;
+  color: #6b7280;
+  margin-bottom: 1.5vw;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+}
+
+.starIcon {
+  color: #fbbf24;
+  fill: #fbbf24;
+  width: 3.5vw;
+  height: 3.5vw;
+}
+
+.clockIcon {
+  width: 3.5vw;
+  height: 3.5vw;
+}
+
+.tagsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tags {
+  display: flex;
+  gap: 2vw;
+
+  span {
+    font-size: 3vw;
+    background: #f3f4f6;
+    color: #4b5563;
+    padding: 0.8vw 2vw;
+    border-radius: 2vw;
+  }
+}
+
+.distance {
+  font-size: 3vw;
+  color: #9ca3af;
+}
