@@ -1,8 +1,10 @@
 import { CloseOutlined } from "@ant-design/icons";
 import type { CheckboxChangeEvent } from "antd";
 import { Checkbox, message, Segmented } from "antd";
+import Cookies from "js-cookie";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { authLogin, authRegister } from "../../api/auth";
 import styles from "./index.module.scss";
 
 const Login: React.FC = () => {
@@ -21,13 +23,59 @@ const Login: React.FC = () => {
   };
 
   // handle login logic
-  const loginHandler = () => {
+  const loginHandler = async () => {
+    if (account.trim() === "" || password.trim() === "") {
+      messageApi.warning("Please fill in all the required fields");
+      return;
+    }
     if (!agreement_checked) {
       messageApi.warning("Please accept the user agreements first");
       return;
     }
-    console.log("Logging in with", { username, role, account, password });
-    navigate("/shop");
+    const res = await authLogin({
+      role,
+      account,
+      password,
+    });
+    if (res.code === 200) {
+      const token = res.data;
+      // set Cookies
+      Cookies.set("token", token, { expires: 7, path: "/" });
+      Cookies.set("role", role, { expires: 7, path: "/" });
+      Cookies.set("username", username, { expires: 7, path: "/" });
+      Cookies.set("account", account, { expires: 7, path: "/" });
+      messageApi.success("Login successfully");
+      navigate("/shop");
+    } else {
+      messageApi.error(res.msg);
+    }
+  };
+
+  // handle register logic
+  const registerHandler = async () => {
+    if (
+      username.trim() === "" ||
+      account.trim() === "" ||
+      password.trim() === ""
+    ) {
+      messageApi.warning("Please fill in all the required fields");
+      return;
+    }
+    const data = {
+      username,
+      account,
+      password,
+    };
+    const res = await authRegister(data);
+    if (res.code === 200) {
+      messageApi.success("Register successfully");
+      setUsername("");
+      setAccount("");
+      setPassword("");
+      setPageType("login");
+    } else {
+      messageApi.error(res.msg);
+    }
   };
 
   return (
@@ -89,7 +137,9 @@ const Login: React.FC = () => {
         </span>
         <div
           className={styles["login-btn"]}
-          onClick={() => (pageType === "login" ? loginHandler() : null)}
+          onClick={() =>
+            pageType === "login" ? loginHandler() : registerHandler()
+          }
         >
           {pageType === "login" ? "Login" : "Register"}
         </div>

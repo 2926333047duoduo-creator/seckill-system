@@ -1,14 +1,26 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+
+export interface ResponseData<T> {
+  code: number;
+  msg: string;
+  data: T;
+}
 
 export const instance = axios.create({
-  baseURL: "/api",
+  baseURL: "http://localhost:8080",
   timeout: 5000,
 });
 
 // 添加请求拦截器
 instance.interceptors.request.use(
   function (config) {
-    // 在发送请求之前做些什么
+    // from Cookie get token
+    const token = Cookies.get("token") || "";
+    if (token) {
+      // add Authorization header
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   function (error) {

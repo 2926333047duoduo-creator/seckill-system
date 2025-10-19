@@ -1,5 +1,6 @@
 import { RightOutlined } from "@ant-design/icons";
 import { message, Modal } from "antd";
+import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
@@ -22,8 +23,8 @@ const Me: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // read role from localStorage
-  const role = localStorage.getItem("role"); // "ADMIN" or "USER"
+  // read role from Cookie
+  const role = Cookies.get("role"); // "ADMIN" or "USER"
 
   // if not "ADMIN", remove "Set Voucher"
   const funcLists =
