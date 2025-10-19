@@ -4,6 +4,7 @@ import com.seckill.backend.common.MessageConstants;
 import com.seckill.backend.common.Result;
 import com.seckill.backend.dto.LoginDTO;
 import com.seckill.backend.dto.RegisterDTO;
+import com.seckill.backend.entity.LoginVO;
 import com.seckill.backend.entity.User;
 import com.seckill.backend.mapper.UserMapper;
 import com.seckill.backend.service.AuthService;
@@ -59,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
      * 登录（支持多角色）
      */
     @Override
-    public Result<String> login(LoginDTO request) {
+    public Result<LoginVO> login(LoginDTO request) {
         User user = userMapper.findByAccount(request.getAccount());
         if (user == null) {
             return Result.fail(MessageConstants.LOGIN_FAILED);
@@ -77,7 +78,9 @@ public class AuthServiceImpl implements AuthService {
 
         String redisKey = "login:token:" + user.getRole().toLowerCase() + ":" + user.getId();
         redisTemplate.opsForValue().set(redisKey, token, 30, TimeUnit.MINUTES);
-
-        return Result.ok(token);
+        LoginVO loginVO = new LoginVO();
+        loginVO.setToken(token);
+        loginVO.setUserName(user.getUsername());
+        return Result.ok(loginVO);
     }
 }

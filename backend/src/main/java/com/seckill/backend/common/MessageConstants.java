@@ -32,4 +32,8 @@ public class MessageConstants {
 
     // ====== Common / Server ======
     public static final String SERVER_ERROR = "服务器内部错误，请稍后再试";
+
+    // ====== Voucher Order / Seckill ======
+    public static final String OUT_OF_STOCK = "库存不足";
+    public static final String DUPLICATE_ORDER = "不能重复下单";
 }

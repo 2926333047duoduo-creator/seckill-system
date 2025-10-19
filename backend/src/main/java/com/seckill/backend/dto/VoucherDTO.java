@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class VoucherDTO {
-    private Long id;
+    private String id;
     private String name;
     private Double amount;
     private Integer total;

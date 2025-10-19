@@ -3,10 +3,10 @@ package com.seckill.backend.controller;
 import com.seckill.backend.common.Result;
 import com.seckill.backend.entity.Voucher;
 import com.seckill.backend.mapper.VoucherMapper;
+import com.seckill.backend.service.IVoucherOrderService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +20,11 @@ public class ClientController {
     public Result<List<Voucher>> listVouchers() {
         List<Voucher> list = voucherMapper.findAll();
         return Result.ok(list);
+    }
+    @Resource
+    private IVoucherOrderService voucherOrderService;
+    @PostMapping("seckill/{id}")
+    public Result seckillVoucher(@PathVariable("id")  String voucherId) {
+        return voucherOrderService.seckillVoucher(voucherId);
     }
 }
