@@ -114,6 +114,7 @@ const Login: React.FC = () => {
           onChange={(e) => setAccount(e.target.value)}
         />
         <input
+          type="password"
           className={styles["login-input"]}
           placeholder="Please enter your password"
           value={password}
