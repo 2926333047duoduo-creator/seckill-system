@@ -23,4 +23,10 @@ public interface VoucherMapper extends BaseMapper<Voucher> {
 
     @Delete("DELETE FROM voucher WHERE id = #{id}")
     int delete(@Param("id") String id);
+
+    @Select("SELECT v.* " +
+            "FROM voucher v " +
+            "JOIN voucher_order vo ON v.id = vo.voucher_id " +
+            "WHERE vo.user_id = #{userId}")
+    List<Voucher> getById(@Param("userId") String userId);
 }
