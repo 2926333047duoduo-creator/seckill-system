@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private JwtUtils jwtUtils;
 
     /**
-     * 用户注册（默认角色：CLIENT）
+     * User registration (default role: CLIENT)
      */
     @Override
     public Result<String> register(RegisterDTO request) {
@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
         String encryptedPwd = passwordEncoder.encode(request.getPassword());
 
         User user = new User();
-        String uuid = UUID.randomUUID().toString(); // 生成 UUID
+        String uuid = UUID.randomUUID().toString(); // Generate UUID
         user.setId(uuid);
         user.setAccount(request.getAccount());
         user.setUsername(request.getUsername());
@@ -57,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 登录（支持多角色）
+     * User login (multi-role supported)
      */
     @Override
     public Result<LoginVO> login(LoginDTO request) {
@@ -65,19 +65,21 @@ public class AuthServiceImpl implements AuthService {
         if (user == null) {
             return Result.fail(MessageConstants.LOGIN_FAILED);
         }
-        if (!user.getRole().equals(request.getRole())){
+
+        if (!user.getRole().equals(request.getRole())) {
             return Result.fail(MessageConstants.ROLE_NOT_MATCH);
         }
+
         boolean matches = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!matches) {
             return Result.fail(MessageConstants.LOGIN_FAILED);
         }
 
-
-        String token = jwtUtils.createToken(user.getAccount(), user.getRole(),user.getId());
+        String token = jwtUtils.createToken(user.getAccount(), user.getRole(), user.getId());
 
         String redisKey = "login:token:" + user.getRole().toLowerCase() + ":" + user.getId();
         redisTemplate.opsForValue().set(redisKey, token, 30, TimeUnit.MINUTES);
+
         LoginVO loginVO = new LoginVO();
         loginVO.setToken(token);
         loginVO.setUserName(user.getUsername());

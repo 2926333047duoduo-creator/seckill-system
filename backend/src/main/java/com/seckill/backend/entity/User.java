@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 @Data
 public class User {
     private String id;
-    private String account;    // 登录账号
-    private String username;   // 用户昵称
-    private String password;   // 加密密码
+    private String account;
+    private String username;
+    private String password;
     private LocalDateTime createTime;
     private String role;
 }
