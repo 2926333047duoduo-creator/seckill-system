@@ -108,8 +108,8 @@ const CouponList: React.FC = () => {
 
   const confirmUpdate = async () => {
     if (!editCoupon) return;
-    const { id, name, stock, startDate, startTime } = editCoupon;
-    if (!name || !stock || !startDate || !startTime) {
+    const { id, name, stock, total, startDate, startTime } = editCoupon;
+    if (!name || !stock || !total || !startDate || !startTime) {
       messageApi.warning("Please fill in all fields.");
       return;
     }
@@ -118,8 +118,10 @@ const CouponList: React.FC = () => {
       id,
       name,
       stock: parseInt(stock),
+      total: parseInt(total),
       startTime: combinedTime,
     };
+
     const res = await updateCoupon(payload);
     if (res.code === 200) {
       messageApi.success("Coupon updated successfully.");
@@ -359,6 +361,14 @@ const CouponList: React.FC = () => {
                 value={editCoupon.stock}
                 onChange={(e) =>
                   setEditCoupon({ ...editCoupon, stock: e.target.value })
+                }
+              />
+              <input
+                type="number"
+                placeholder="Total Quantity"
+                value={editCoupon.total}
+                onChange={(e) =>
+                  setEditCoupon({ ...editCoupon, total: e.target.value })
                 }
               />
               <div className={styles.datetimeRow}>
