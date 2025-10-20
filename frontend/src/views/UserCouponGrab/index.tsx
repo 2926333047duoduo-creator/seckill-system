@@ -1,53 +1,91 @@
+import { message } from "antd";
 import { Check, ChevronRight, Clock, Gift } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { clientSeckill, getClientCouponList } from "../../api/client";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  clientSeckill,
+  getClientCouponList,
+  getMyCoupon,
+} from "../../api/client";
 import Navbar from "../../components/navbar";
 import type { AnyType } from "../../types";
 import styles from "./index.module.scss";
 
 const UserCouponGrab: React.FC = () => {
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [coupons, setCoupons] = useState<AnyType[]>([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const fetchCoupons = async () => {
-    const res = await getClientCouponList();
-    if (res.code === 200) {
-      // add color and grabbed fields for display
-      const colored = (res.data as object[]).map((c: AnyType, i: number) => ({
-        ...c,
-        color: colorList[i % colorList.length],
-        grabbed: false,
-      }));
+  const colorList = useMemo(() => {
+    return [
+      "linear-gradient(135deg, #ff6a00, #ee0979)",
+      "linear-gradient(135deg, #9C27B0, #E040FB)",
+      "linear-gradient(135deg, #03A9F4, #00BCD4)",
+      "linear-gradient(135deg, #4CAF50, #009688)",
+      "linear-gradient(135deg, #FF9800, #F44336)",
+    ];
+  }, []);
+
+  const fetchCoupons = useCallback(async () => {
+    try {
+      const [allCouponRes, myCouponRes] = await Promise.all([
+        getClientCouponList(),
+        getMyCoupon(),
+      ]);
+      if (allCouponRes.code !== 200) {
+        messageApi.error("Failed to fetch coupon list");
+        return;
+      }
+      const myIds = (myCouponRes?.data || []).map((item: AnyType) => item.id);
+      const colored = (allCouponRes.data as object[]).map(
+        (c: AnyType, i: number) => ({
+          ...c,
+          color: colorList[i % colorList.length],
+          grabbed: myIds.includes(c.id),
+        })
+      );
       setCoupons(colored);
+    } catch (err) {
+      console.error(err);
+      messageApi.error("Failed to load coupons");
     }
-  };
+  }, [colorList, messageApi]);
 
   useEffect(() => {
     fetchCoupons();
-  }, []);
-
-  const colorList = [
-    "linear-gradient(135deg, #ff6a00, #ee0979)",
-    "linear-gradient(135deg, #9C27B0, #E040FB)",
-    "linear-gradient(135deg, #03A9F4, #00BCD4)",
-    "linear-gradient(135deg, #4CAF50, #009688)",
-    "linear-gradient(135deg, #FF9800, #F44336)",
-  ];
+  }, [fetchCoupons]);
 
   const handleGrab = async (coupon: AnyType) => {
+    const now = Date.now();
+    const start = new Date(coupon.startTime).getTime();
+    if (now < start) {
+      messageApi.warning("The event has not started yet!");
+      return;
+    }
     if (coupon.grabbed || coupon.stock <= 0) return;
     const res = await clientSeckill(coupon.id);
-    if (res.code === 200) {
-      coupon.grabbed = true;
+    if (res.code !== 200) {
+      messageApi.error(res.msg || "Fail to grab coupon");
+      return;
     }
-    fetchCoupons();
+    setCoupons((prev) =>
+      prev.map((c) =>
+        c.id === coupon.id
+          ? { ...c, grabbed: true, stock: Math.max(0, c.stock - 1) }
+          : c
+      )
+    );
     setShowSuccessModal(true);
     setTimeout(() => setShowSuccessModal(false), 1800);
   };
 
   return (
     <div className={styles.page}>
+      {contextHolder}
       <Navbar title="Coupon Center" />
+
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.headerInner}>
@@ -70,10 +108,11 @@ const UserCouponGrab: React.FC = () => {
           const stock = coupon.stock;
           const progress = ((total - stock) / total) * 100;
           const isHot = stock < 10;
+          const notStarted = new Date() < new Date(coupon.startTime);
 
           return (
             <div key={coupon.id} className={styles.card}>
-              {/* Left side - coupon visual */}
+              {/* Left */}
               <div
                 className={styles.cardLeft}
                 style={{ background: coupon.color }}
@@ -85,22 +124,28 @@ const UserCouponGrab: React.FC = () => {
                 )}
               </div>
 
-              {/* Right side - details */}
+              {/* Right */}
               <div className={styles.cardRight}>
                 <div className={styles.cardHeader}>
                   <h3>{coupon.name}</h3>
                   <button
                     onClick={() => handleGrab(coupon)}
-                    disabled={coupon.grabbed || stock <= 0}
+                    disabled={coupon.grabbed || stock <= 0 || notStarted}
                     className={`${styles.grabBtn} ${
-                      coupon.grabbed || stock <= 0 ? styles.disabled : ""
+                      coupon.grabbed || stock <= 0 || notStarted
+                        ? styles.disabled
+                        : ""
                     }`}
                   >
-                    {coupon.grabbed ? (
+                    {notStarted ? (
+                      "Not started"
+                    ) : coupon.grabbed ? (
                       <>
                         <Check className={styles.smallIcon} />
                         Claimed
                       </>
+                    ) : stock <= 0 ? (
+                      "Sold out"
                     ) : (
                       "Grab Now"
                     )}
@@ -112,7 +157,14 @@ const UserCouponGrab: React.FC = () => {
                     <Clock className={styles.smallIcon} />
                     <span>
                       Starts on{" "}
-                      {new Date(coupon.startTime).toLocaleDateString("en-GB")}
+                      {new Date(coupon.startTime).toLocaleString("en-GB", {
+                        hour12: false,
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </span>
                   </div>
 
@@ -147,7 +199,10 @@ const UserCouponGrab: React.FC = () => {
         })}
 
         {/* My Coupons */}
-        <div className={styles.myCouponBtn}>
+        <div
+          className={styles.myCouponBtn}
+          onClick={() => navigate("/me/myCoupon")}
+        >
           <ChevronRight className={styles.arrow} />
           View My Coupons
         </div>

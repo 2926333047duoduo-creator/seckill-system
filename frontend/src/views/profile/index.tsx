@@ -8,7 +8,7 @@ import styles from "./index.module.scss";
 const allFuncLists: string[] = [
   "My Account",
   "My Orders",
-  "My Voucher",
+  "My Coupons",
   "Set Voucher",
   "My Feedback",
   "FAQ",
@@ -31,9 +31,13 @@ const Profile: React.FC = () => {
 
   const funcLists = (() => {
     let funcLists = [...allFuncLists];
-    if (role !== "ADMIN") {
-      // if not "ADMIN", remove "Set Voucher"
+    if (role === "CLIENT") {
+      // if CLIENT, remove "Set Voucher"
       funcLists = funcLists.filter((item) => item !== "Set Voucher");
+    }
+    if (role === "ADMIN") {
+      // if ADMIN, remove "My Coupons"
+      funcLists = funcLists.filter((item) => item !== "My Coupons");
     }
     if (!isLogin) {
       // if not login, remove "Log out"
@@ -52,8 +56,8 @@ const Profile: React.FC = () => {
   };
 
   const itemClickHandler = (item: string) => {
-    if (item === "My Voucher") {
-      console.log("clicked My Voucher");
+    if (item === "My Coupons") {
+      navigate("/me/myCoupon");
     } else if (item === "Set Voucher") {
       navigate("/me/couponList");
     } else if (item === "Log out") {

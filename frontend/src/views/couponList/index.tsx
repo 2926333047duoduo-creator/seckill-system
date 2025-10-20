@@ -86,7 +86,6 @@ const CouponList: React.FC = () => {
       total: parseInt(total),
       stock: parseInt(stock),
       startTime: combinedTime,
-      createTime: new Date().toISOString(),
     };
     const res = await addCoupon(newItem);
     if (res.code === 200) {

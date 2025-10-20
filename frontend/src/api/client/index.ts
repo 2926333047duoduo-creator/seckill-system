@@ -8,3 +8,7 @@ export const clientSeckill = (id: string): Promise<ResponseData<string>> => {
 export const getClientCouponList = (): Promise<ResponseData<object[]>> => {
   return instance.get("/client/list");
 };
+
+export const getMyCoupon = (): Promise<ResponseData<object[]>> => {
+  return instance.get("/client/myVoucher");
+};

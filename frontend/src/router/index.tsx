@@ -4,6 +4,7 @@ import CouponList from "../views/couponList";
 import Layout from "../views/layout/index";
 import Login from "../views/login/index";
 import Me from "../views/me/index";
+import MyCoupon from "../views/myCoupon";
 import Profile from "../views/profile/index";
 import Shop from "../views/shop/index";
 import UserCouponGrab from "../views/UserCouponGrab/index";
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
           {
             path: "/me/couponList",
             element: <CouponList />,
+          },
+          {
+            path: "/me/myCoupon",
+            element: <MyCoupon />,
           },
         ],
       },

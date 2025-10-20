@@ -1,0 +1,123 @@
+.page {
+  min-height: 100vh;
+  background: #f8f8f8;
+}
+
+.header {
+  background: linear-gradient(135deg, #ff9800, #f44336);
+  color: #fff;
+  padding: 32px 20px;
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconBox {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ticketIcon {
+  width: 26px;
+  height: 26px;
+  color: #fff;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.listContainer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.left {
+  min-width: 120px;
+  padding: 20px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.discount {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.condition {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.dashed {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  overflow: hidden;
+}
+
+.dashed::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 0;
+  bottom: 0;
+  border-left: 2px dashed rgba(255, 255, 255, 0.4);
+}
+
+.right {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.couponTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
