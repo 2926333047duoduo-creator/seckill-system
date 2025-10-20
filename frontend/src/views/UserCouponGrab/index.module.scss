@@ -1,0 +1,248 @@
+.page {
+  min-height: 94vh;
+  background: linear-gradient(135deg, #fff8f0, #ffe7e0);
+  padding-bottom: 6vh;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(90deg, #ff6a00, #ee0979);
+  color: #fff;
+  padding: 4vh 6vw;
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+}
+
+.headerIcon {
+  width: 12vw;
+  height: 12vw;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.giftIcon {
+  width: 7vw;
+  height: 7vw;
+}
+
+.title {
+  font-size: 5vw;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 3.5vw;
+  opacity: 0.9;
+}
+
+/* Coupon list */
+.listContainer {
+  padding: 4vh 5vw;
+}
+
+.card {
+  background: #fff;
+  display: flex;
+  border-radius: 3vw;
+  overflow: hidden;
+  box-shadow: 0 0.6vh 1.2vh rgba(0, 0, 0, 0.05);
+  margin-bottom: 3vh;
+}
+
+.cardLeft {
+  width: 26vw;
+  color: #fff;
+  padding: 3vh 2vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.amount {
+  font-size: 7vw;
+  font-weight: 700;
+}
+
+.condition {
+  font-size: 3.5vw;
+  opacity: 0.9;
+}
+
+.hot {
+  margin-top: 1vh;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 5vw;
+  padding: 0.5vh 2vw;
+  font-size: 3vw;
+}
+
+.cardRight {
+  flex: 1;
+  padding: 1vh 2vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    font-size: 4vw;
+    font-weight: 600;
+  }
+}
+
+.grabBtn {
+  background: linear-gradient(90deg, #ff6a00, #f44336);
+  color: #fff;
+  border: none;
+  border-radius: 5vw;
+  padding: 1vh 3vw;
+  font-size: 3.5vw;
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.disabled {
+  background: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.smallIcon {
+  width: 4vw;
+  height: 4vw;
+}
+
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  color: #777;
+  font-size: 3vw;
+  margin: 1vh 0;
+}
+
+.progressBox {
+  .progressTop {
+    display: flex;
+    justify-content: space-between;
+    font-size: 3vw;
+    margin-bottom: 1vh;
+  }
+}
+
+.stockHot {
+  color: #f44336;
+}
+.stockNormal {
+  color: #777;
+}
+
+.progressBar {
+  height: 1vh;
+  background: #eee;
+  border-radius: 5vw;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  border-radius: 5vw;
+  transition: width 0.4s ease;
+}
+
+/* 我的优惠券 */
+.myCouponBtn {
+  text-align: center;
+  color: #ff6a00;
+  font-weight: 600;
+  font-size: 4vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1vw;
+  margin-top: 4vh;
+}
+
+.arrow {
+  width: 4vw;
+  height: 4vw;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 3vw;
+  padding: 5vh 5vw;
+  text-align: center;
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modalIcon {
+  width: 12vw;
+  height: 12vw;
+  background: #e8f5e9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2vh;
+}
+
+.modalCheck {
+  width: 6vw;
+  height: 6vw;
+  color: #4caf50;
+}
+
+.modalCoupon {
+  margin-top: 2vh;
+  border-radius: 3vw;
+  color: #fff;
+  padding: 3vh;
+}
+
+.modalAmount {
+  font-size: 6vw;
+  font-weight: 700;
+}
+
+.modalText {
+  font-size: 3.5vw;
+}

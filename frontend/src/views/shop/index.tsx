@@ -9,43 +9,20 @@ import {
   Star,
   Utensils,
 } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
 
-export default function FoodDeliveryHome() {
+const Shop: React.FC = () => {
+  const navigate = useNavigate();
+
   const [searchQuery, setSearchQuery] = useState("");
-
-  const coupons = [
-    {
-      id: 1,
-      title: "New User Bonus",
-      discount: "$20",
-      condition: "Available over $40",
-      color: "red",
-    },
-    {
-      id: 2,
-      title: "Premium Restaurant",
-      discount: "$15",
-      condition: "Available over $50",
-      color: "purple",
-    },
-    {
-      id: 3,
-      title: "Afternoon Tea",
-      discount: "$10",
-      condition: "Available over $30",
-      color: "blue",
-    },
-  ];
-
   const categories = [
     { icon: <Utensils />, name: "Food", color: "orange" },
     { icon: <Coffee />, name: "Coffee & Tea", color: "amber" },
     { icon: <Pizza />, name: "Fast Food", color: "red" },
     { icon: <IceCream />, name: "Dessert", color: "pink" },
   ];
-
   const restaurants = [
     {
       id: 1,
@@ -89,7 +66,12 @@ export default function FoodDeliveryHome() {
       </div>
 
       {/* Coupons */}
-      <div className={styles.section}>
+      <div
+        className={styles.section}
+        onClick={() => {
+          navigate("/userCouponGrab");
+        }}
+      >
         <div className={styles.sectionTitle}>
           <div className={styles.titleLeft}>
             <Gift className={styles.titleIcon} />
@@ -97,21 +79,7 @@ export default function FoodDeliveryHome() {
           </div>
           <button className={styles.moreButton}>More &gt;</button>
         </div>
-        <div className={styles.couponGrid}>
-          {coupons.map((coupon) => (
-            <div
-              key={coupon.id}
-              className={`${styles.couponCard} ${styles[coupon.color]}`}
-            >
-              <div>
-                <div className={styles.discount}>{coupon.discount}</div>
-                <div className={styles.condition}>{coupon.condition}</div>
-                <button className={styles.claimButton}>Claim Now</button>
-              </div>
-              <div className={styles.circle}></div>
-            </div>
-          ))}
-        </div>
+        <div>Go to coupon center to find more</div>
       </div>
 
       {/* Categories */}
@@ -169,4 +137,6 @@ export default function FoodDeliveryHome() {
       <div style={{ height: "8vh" }}></div>
     </div>
   );
-}
+};
+
+export default Shop;

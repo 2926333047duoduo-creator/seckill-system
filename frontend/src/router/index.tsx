@@ -6,11 +6,16 @@ import Login from "../views/login/index";
 import Me from "../views/me/index";
 import Profile from "../views/profile/index";
 import Shop from "../views/shop/index";
+import UserCouponGrab from "../views/UserCouponGrab/index";
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/userCouponGrab",
+    element: <UserCouponGrab />,
   },
   {
     path: "/",

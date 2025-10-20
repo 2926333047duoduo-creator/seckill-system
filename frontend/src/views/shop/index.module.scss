@@ -103,65 +103,6 @@
   border: none;
 }
 
-/* Coupons */
-.couponGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2vw;
-}
-
-.couponCard {
-  border-radius: 3vw;
-  padding: 4vw;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #f87171, #f59e0b);
-
-  &.red {
-    background: linear-gradient(135deg, #f87171, #f59e0b);
-  }
-
-  &.purple {
-    background: linear-gradient(135deg, #a855f7, #ec4899);
-  }
-
-  &.blue {
-    background: linear-gradient(135deg, #3b82f6, #06b6d4);
-  }
-}
-
-.discount {
-  font-size: 5vw;
-  font-weight: 700;
-}
-
-.condition {
-  font-size: 3vw;
-  opacity: 0.85;
-  margin-bottom: 2vw;
-}
-
-.claimButton {
-  background: white;
-  color: #374151;
-  border: none;
-  padding: 1vw 3vw;
-  border-radius: 6vw;
-  font-size: 3vw;
-}
-
-.circle {
-  position: absolute;
-  right: -3vw;
-  bottom: -3vw;
-  width: 12vw;
-  height: 12vw;
-  background: white;
-  opacity: 0.1;
-  border-radius: 50%;
-}
-
 /* Categories */
 .sectionHeader {
   font-size: 4vw;
