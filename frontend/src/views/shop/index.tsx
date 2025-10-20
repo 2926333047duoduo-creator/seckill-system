@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import {
   Clock,
   Coffee,
@@ -15,6 +16,8 @@ import styles from "./index.module.scss";
 
 const Shop: React.FC = () => {
   const navigate = useNavigate();
+
+  const role = Cookies.get("role");
 
   const [searchQuery, setSearchQuery] = useState("");
   const categories = [
@@ -66,21 +69,23 @@ const Shop: React.FC = () => {
       </div>
 
       {/* Coupons */}
-      <div
-        className={styles.section}
-        onClick={() => {
-          navigate("/userCouponGrab");
-        }}
-      >
-        <div className={styles.sectionTitle}>
-          <div className={styles.titleLeft}>
-            <Gift className={styles.titleIcon} />
-            <h2>Coupon Center</h2>
+      {role === "CLIENT" ? (
+        <div
+          className={styles.section}
+          onClick={() => {
+            navigate("/userCouponGrab");
+          }}
+        >
+          <div className={styles.sectionTitle}>
+            <div className={styles.titleLeft}>
+              <Gift className={styles.titleIcon} />
+              <h2>Coupon Center</h2>
+            </div>
+            <button className={styles.moreButton}>More &gt;</button>
           </div>
-          <button className={styles.moreButton}>More &gt;</button>
+          <div>Go to coupon center to find more</div>
         </div>
-        <div>Go to coupon center to find more</div>
-      </div>
+      ) : null}
 
       {/* Categories */}
       <div className={styles.section}>

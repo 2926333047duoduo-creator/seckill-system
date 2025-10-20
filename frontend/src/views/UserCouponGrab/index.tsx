@@ -1,7 +1,6 @@
 import { Check, ChevronRight, Clock, Gift } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { getCouponList } from "../../api/admin";
-import { clientSeckill } from "../../api/client";
+import { clientSeckill, getClientCouponList } from "../../api/client";
 import Navbar from "../../components/navbar";
 import type { AnyType } from "../../types";
 import styles from "./index.module.scss";
@@ -11,7 +10,7 @@ const UserCouponGrab: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const fetchCoupons = async () => {
-    const res = await getCouponList();
+    const res = await getClientCouponList();
     if (res.code === 200) {
       // add color and grabbed fields for display
       const colored = (res.data as object[]).map((c: AnyType, i: number) => ({
