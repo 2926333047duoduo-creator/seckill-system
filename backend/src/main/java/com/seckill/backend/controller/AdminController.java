@@ -5,6 +5,7 @@ import com.seckill.backend.common.Result;
 import com.seckill.backend.dto.VoucherDTO;
 import com.seckill.backend.entity.Voucher;
 import com.seckill.backend.mapper.VoucherMapper;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,9 @@ public class AdminController {
     public Result<String> addVoucher(@RequestBody VoucherDTO dto) {
         try {
             // 1. Validate start time
-//            if (dto.getStartTime() == null || dto.getStartTime().isBefore(LocalDateTime.now())) {
-//                return Result.fail("Start time cannot be earlier than the current time");
-//            }
+            if (dto.getStartTime() == null || dto.getStartTime().isBefore(LocalDateTime.now())) {
+                return Result.fail("Start time cannot be earlier than the current time");
+            }
 
             // 2. Build entity object
             Voucher voucher = new Voucher();
