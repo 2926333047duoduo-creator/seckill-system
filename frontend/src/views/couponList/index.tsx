@@ -1,4 +1,5 @@
-import { message } from "antd";
+import { DatePicker, message } from "antd";
+import locale from "antd/es/date-picker/locale/en_GB";
 import { Calendar, Edit, Package, Plus, Tag, Trash2 } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import {
@@ -303,11 +304,14 @@ const CouponList: React.FC = () => {
               />
 
               <div className={styles.datetimeRow}>
-                <input
-                  type="date"
-                  value={newCoupon.startDate}
-                  onChange={(e) =>
-                    setNewCoupon({ ...newCoupon, startDate: e.target.value })
+                <DatePicker
+                  locale={locale}
+                  format="YYYY-MM-DD"
+                  onChange={(_date, dateString) =>
+                    setNewCoupon({
+                      ...newCoupon,
+                      startDate: dateString as string,
+                    })
                   }
                 />
                 <input
